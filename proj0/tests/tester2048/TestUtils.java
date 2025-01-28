@@ -2,6 +2,7 @@ package tester2048;
 
 import game2048rendering.Model;
 import game2048rendering.Side;
+import game2048logic.GameLogic;
 
 import java.util.Formatter;
 
@@ -12,14 +13,18 @@ public class TestUtils {
      * Checks that performing a tilt in the specified direction on the before
      * Model results in the after Model
      */
-    public static void checkTilt(Model before, Model after, Side direction) {
-        String prevBoard = before.toString();
-        before.tilt(direction);
+    public static void checkTilt(int[][] board, int[][] expected, Side direction) {
+        String expectedBoard = boardToString(expected);
+
+        String beforeBoard = boardToString(board);
+        GameLogic.tilt(board, direction);
+        String afterBoard = boardToString(board);
+
         String errMsg = String.format("Board incorrect. Before tilting towards"
                         + " %s, your board looked like:%s%nAfter the call to"
                         + " tilt, we expected:%s%nBut your board looks like:%s.",
-                direction, prevBoard, after, before);
-        assertWithMessage(errMsg).that(before).isEqualTo(after);
+                direction, beforeBoard, expectedBoard, afterBoard);
+        assertWithMessage(errMsg).that(afterBoard).isEqualTo(expectedBoard);
     }
 
     public static String boardToString(int[][] board) {
