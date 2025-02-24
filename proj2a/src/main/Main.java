@@ -1,10 +1,8 @@
 package main;
-
 import static utils.Utils.*;
-
 import org.slf4j.LoggerFactory;
-
 import browser.NgordnetServer;
+import ngrams.NGramMap;
 
 public class Main {
     static {
@@ -17,7 +15,7 @@ public class Main {
 
         /* The following code might be useful to you.
 
-        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        NGramMap ngm = new NGramMap(TOP_49887_WORDS_FILE, TOTAL_COUNTS_FILE);
 
         */
 
