@@ -10,7 +10,7 @@ public class Main {
     static {
         LoggerFactory.getLogger(Main.class).info("\033[1;38mChanging text color to white");
     }
-    /* Do not delete or modify the code above! */
+    /* Do not delete or modify the static code above! */
 
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
