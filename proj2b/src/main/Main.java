@@ -11,6 +11,8 @@ public class Main {
     public static final String TOTAL_COUNTS_FILE = "data/ngrams/total_counts.csv";
     private static final String SMALL_WORDS_FILE = "data/ngrams/top_14377_words.csv";
     private static final String WORDS_FILE = "data/ngrams/top_49887_words.csv";
+    private static final String RANDOM_WORDS_25 = "data/ngrams/random_freq_25.csv";
+    private static final String RANDOM_WORDS_10 = "data/ngrams/random_freq_10.csv";
 
     // wordnet Files
     public static final String SMALL_SYNSET_FILE = "data/wordnet/synsets16.txt";
@@ -19,6 +21,10 @@ public class Main {
     public static final String LARGE_HYPONYM_FILE = "data/wordnet/hyponyms.txt";
     private static final String HYPONYMS_FILE_SUBSET = "data/wordnet/hyponyms1000-subgraph.txt";
     private static final String SYNSETS_FILE_SUBSET = "data/wordnet/synsets1000-subgraph.txt";
+    private static final String RANDOM_HYP_25 = "data/wordnet/random_hyp_25.txt";
+    private static final String RANDOM_SYN_25 = "data/wordnet/random_syn_25.txt";
+    private static final String RANDOM_HYP_10 = "data/wordnet/random_hyp_10.txt";
+    private static final String RANDOM_SYN_10 = "data/wordnet/random_syn_10.txt";
 
     // EECS files
     private static final String FREQUENCY_EECS_FILE = "data/ngrams/frequency-EECS.csv";
