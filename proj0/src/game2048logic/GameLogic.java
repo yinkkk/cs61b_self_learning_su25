@@ -20,6 +20,22 @@ public class GameLogic {
      */
     public static int moveTileUpAsFarAsPossible(int[][] board, int r, int c, int minR) {
         // TODO: Fill this in in tasks 2, 3, 4
+        int index = r;
+        if( r == 0 || r == minR) return 0;
+
+        for(int i = r-1 ; i >= minR ;i--){
+            if (board[i][c] == 0 && (index == i+1) ) {
+                board[i][c] = board[i + 1][c];
+                board[i + 1][c] = 0;
+                index = i;
+            }
+            if (board[i][c] == board[i + 1][c] && (index == i+1) ) {
+                board[i][c] = 2*board[i][c];
+                board[i + 1][c] = 0;
+                return i+1;
+            }
+
+        }
         return 0;
     }
 
@@ -32,6 +48,11 @@ public class GameLogic {
      */
     public static void tiltColumn(int[][] board, int c) {
         // TODO: fill this in in task 5
+        int index = 0;
+        for(int i = 0 ; i < board.length;i++){
+            int test = moveTileUpAsFarAsPossible(board,i,c,index);
+            if (test > index) index = test;
+        }
         return;
     }
 
@@ -42,6 +63,10 @@ public class GameLogic {
      */
     public static void tiltUp(int[][] board) {
         // TODO: fill this in in task 6
+        for(int i = 0 ; i < board.length;i++){
+           tiltColumn(board,i);
+        }
+
         return;
     }
 
@@ -55,12 +80,24 @@ public class GameLogic {
     public static void tilt(int[][] board, Side side) {
         // TODO: fill this in in task 7
         if (side == Side.EAST) {
+            rotateLeft(board);
+            tiltUp(board);
+            rotateRight(board);
             return;
         } else if (side == Side.WEST) {
+            rotateRight(board);
+            tiltUp(board);
+            rotateLeft(board);
             return;
         } else if (side == Side.SOUTH) {
+            rotateRight(board);
+            rotateRight(board);
+            tiltUp(board);
+            rotateRight(board);
+            rotateRight(board);
             return;
         } else {
+            tiltUp(board);
             return;
         }
     }
