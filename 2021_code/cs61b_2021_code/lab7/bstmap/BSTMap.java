@@ -1,7 +1,9 @@
 package bstmap;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.LinkedList;
 
 public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
 
@@ -94,6 +96,11 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
     public void printInOrder(){
         print(root);
         System.out.println();
+        LinkedList<K> a = new LinkedList<>();
+        KeytoList(root,a);
+        for (K s : a ){
+            System.out.print(s+" ,");
+        }
     }
 
     private void print(BSTNode p) {
@@ -102,6 +109,14 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         print(p.left);
         print(p.right);
     }
+
+    private void KeytoList(BSTNode p,LinkedList<K> KeyList){
+        if (p == null) return;
+        KeyList.add(p.key);
+        KeytoList(p.left,KeyList);
+        KeytoList(p.right,KeyList);
+    }
+    
     @Override
     public void put(K key, V value) {
         if (root.key == null){
@@ -139,22 +154,158 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
 
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException("Unfinished");
+        Set<K> KeySet = new HashSet<>();
+        for (K item: this){
+            KeySet.add(item);
+        }
+        return KeySet;
     }
+    private NodePair findKeyNodeAndPrev(K key){
+        if (root.key == null){
+            return null;
+        }
 
+        BSTNode p = root;
+        BSTNode prev = null;
+        while (p!=null){
+            if (key.compareTo(p.key) < 0){
+                prev = p;
+                p=p.left;
+            }
+            else if (key.compareTo(p.key) > 0){
+                prev = p;
+                p=p.right;
+            }
+            else{
+                return new NodePair(prev,p);
+            }
+        }
+        return null;
+    }
+    private NodePair findLess(BSTNode prev,BSTNode p){
+        if (p.right == null){
+            return new NodePair(prev,p);
+        }
+        return findLess(p,p.right);
+    }
+    private class NodePair{
+        private BSTNode prev;
+        private BSTNode curr;
+
+        public NodePair(BSTNode prev,BSTNode curr){
+            this.prev = prev;
+            this.curr = curr;
+        }
+    }
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException("Unfinished");
-    }
+        NodePair a = findKeyNodeAndPrev(key);
+        if (a==null) return null;
+        V tmp = a.curr.val;
+        size--;
 
+        if (a.prev == null){
+            if (a.curr.left == null && a.curr.right ==null){
+                this.clear();
+                return tmp;
+            }
+            if (a.curr.left == null){
+                root = root.right;
+                return tmp;
+            }
+            if (a.curr.right == null){
+                root = root.left;
+                return tmp;
+            }
+
+            NodePair newNode = findLess(a.curr,a.curr.left);
+            if (newNode.prev == a.curr) {
+                // 前驱就是 a.curr.left
+                newNode.curr.right = a.curr.right;
+                root = newNode.curr;
+            } else {
+                // 前驱在更深的位置
+                newNode.prev.right = newNode.curr.left;
+                newNode.curr.left = a.curr.left;
+                newNode.curr.right = a.curr.right;
+                root = newNode.curr;
+            }
+            return tmp;
+        }
+        if (a.curr.left == null && a.curr.right ==null){ // no leaves
+            if (a.prev.left == a.curr){
+                a.prev.left = null;
+                return tmp;
+            }
+            else {
+                a.prev.right = null;
+                return tmp;
+            }
+        }
+
+        if (a.curr.left == null ){  // one leave
+            if (a.prev.left == a.curr){
+                a.prev.left = a.curr.right;
+                return tmp;
+            }
+            else {
+                a.prev.right = a.curr.right;
+                return tmp;
+            }
+        }
+        if (a.curr.right == null){
+            if (a.prev.left == a.curr){
+                a.prev.left = a.curr.left;
+                return tmp;
+            }
+            else {
+                a.prev.right = a.curr.left;
+                return tmp;
+            }
+        }
+
+        NodePair newNode = findLess(a.curr,a.curr.left);
+        newNode.prev.right = newNode.curr.left;
+        newNode.curr.left = a.curr.left;
+        newNode.curr.right = a.curr.right;
+        if (a.prev.left == a.curr){
+            a.prev.left = newNode.curr;
+        }
+        else {
+            a.prev.right = newNode.curr;
+        }
+        return tmp;
+    }
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException("Unfinished");
+        if (get(key)!= value) return null;
+        remove(key);
+        return value;
     }
-
-
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException("Unfinished");
+        return new BSTMapIterator();
     }
+
+    private class BSTMapIterator implements Iterator<K>{
+        private int wiz;
+        private LinkedList<K> Items = new LinkedList<>();
+        public BSTMapIterator(){
+            wiz = 0;
+            KeytoList(root,Items);
+        }
+        @Override
+        public boolean hasNext() {
+          return wiz < size;
+        }
+        @Override
+        public K next() {
+            if (hasNext()){
+                wiz += 1;
+                return Items.get(wiz-1);
+            }
+            return null;
+        }
+    }
+
 }
