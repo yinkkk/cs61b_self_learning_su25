@@ -7,15 +7,13 @@ import java.util.Collection;
  * Hash Table with Array List buckets
  * @author Neil Kulkarni
  */
-public class MyHashMapALBuckets<K, V> extends MyHashMap<K, V> {
+public class MyHashMapALBuckets<K extends Comparable<K> , V> extends MyHashMap<K, V> {
 
     /**
      * Constructor that creates a backing array with default
      * initial size and load factor
      */
-    public MyHashMapALBuckets() {
-        super();
-    }
+    public MyHashMapALBuckets() { super();}
 
     /**
      * Constructor that creates a backing array of initialSize
